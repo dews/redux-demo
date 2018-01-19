@@ -23,14 +23,9 @@ let bike = (state = [], action) => {
         default:
             return state
     }
-
-}
-let reducer = (state = {}, action) => {
-    return {
-        bike: bike(state.bike, action)
-    }
 }
 
+let reducer = combineReducers({bike})
 let store = createStore(reducer)
 const unsubscribe = store.subscribe(() =>
     console.log(store.getState())
