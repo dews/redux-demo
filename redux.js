@@ -53,12 +53,18 @@ export function combineReducers(reducers) {
   );
 }
 
-export function createStore(reducer, initialState) {
+export function createStore(reducer, initialState, enhancer) {
   var currentReducer = reducer;
   var currentState = initialState;
   var listeners = [];
   var isDispatching = false;
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.')
+    }
 
+    return enhancer(createStore)(reducer, currentState)
+  }
   function getState() {
     return currentState;
   }

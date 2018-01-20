@@ -1,4 +1,4 @@
-import { createStore, combineReducers } from './redux';
+import { createStore, combineReducers, applyMiddleware } from './redux';
 
 // action
 let addBike = (bike) => {
@@ -25,11 +25,27 @@ let bike = (state = [], action) => {
     }
 }
 
-let reducer = combineReducers({bike})
-let store = createStore(reducer)
-const unsubscribe = store.subscribe(() =>
-    console.log(store.getState())
+let reducer = combineReducers({ bike })
+let store = createStore(reducer, ['Use Redux'],
+    applyMiddleware(logger)
 )
+// const unsubscribe = store.subscribe(() =>
+//     console.log(store.getState())
+// )
 store.dispatch(addBike({ name: 'giant' }))
 store.dispatch(addBike({ name: 'trek' }))
 store.dispatch(removeBike({ name: 'giant' }))
+function logger({ getState }) {
+    return next => action => {
+        console.log('will dispatch', action)
+
+        // Call the next dispatch method in the middleware chain.
+        let returnValue = next(action)
+
+        console.log('state after dispatch', getState())
+
+        // This will likely be the action itself, unless
+        // a middleware further in chain changed it.
+        return returnValue
+    }
+}
