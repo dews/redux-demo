@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from './redux';
+import { createStore, combineReducers, applyMiddleware, bindActionCreators } from './redux';
 
 // action
 let addBike = (bike) => {
@@ -32,6 +32,8 @@ let store = createStore(reducer, ['Use Redux'],
 // const unsubscribe = store.subscribe(() =>
 //     console.log(store.getState())
 // )
+let binded = bindActionCreators(addBike, store.dispatch)
+binded({ name: 'giant' })
 store.dispatch(addBike({ name: 'giant' }))
 store.dispatch(addBike({ name: 'trek' }))
 store.dispatch(removeBike({ name: 'giant' }))
